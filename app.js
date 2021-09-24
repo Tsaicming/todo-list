@@ -32,6 +32,8 @@ app.get('/', (req, res) => {
     .catch(error => console.error(error))           // 錯誤處理
 })
 
+// **************** 新增 todo **************** //
+
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
@@ -43,10 +45,34 @@ app.post('/todos', (req, res) => {
     .catch(error => console.log(error))   // 錯誤處理
 })
 
+// **************** 查看特定 todo  **************** //
+
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)            //從資料庫查找出資料
     .lean()                           //把資料轉換成單純的 JS 物件
     .then((todo) => res.render('detail', { todo })) //把資料送給前端樣板
     .catch(error => console.log(error))             //錯誤處理
+})
+
+// **************** 修改 todo 資料 **************** //
+
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id)            //查詢資料
+    .then(todo => {                   //如果查詢成功，重新儲存修改後的資料，否則到 .catch 錯誤處理
+      todo.name = name
+      return todo.save()
+    })
+    .then(() => res.redirect(`/todos/${id}`))  //如果儲存成功後，導向首頁，否則到 .catch 錯誤處理
+    .catch(error => console.log(error))
 })

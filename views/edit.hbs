@@ -1,0 +1,5 @@
+<form action="/todos/{{ todo._id }}/edit" method="post">
+  <input type="text" placeholder="name" name="name" value="{{ todo.name }}"> <!-- 要帶入資料內容-->
+  <button type="submit">Save</button>
+  <a href="/">back</a>
+</form>
