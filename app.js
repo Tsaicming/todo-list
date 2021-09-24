@@ -76,3 +76,13 @@ app.post('/todos/:id/edit', (req, res) => {
     .then(() => res.redirect(`/todos/${id}`))  //如果儲存成功後，導向首頁，否則到 .catch 錯誤處理
     .catch(error => console.log(error))
 })
+
+// **************** 刪除 todo 資料 **************** //
+
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id                     // id = 查詢出使用者想刪除的 todo 的 id
+  return Todo.findById(id)                     //資料庫查詢成功後，把資料放進 todo
+    .then(todo => todo.remove())               //用 todo.remove() 刪除這筆資料
+    .then(() => res.redirect('/'))             //成功刪除以後，使用 redirect 重新呼叫首頁
+    .catch(error => console.log(error))
+})
