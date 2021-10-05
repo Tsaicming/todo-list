@@ -3,7 +3,11 @@ const Schema = mongoose.Schema
 const todoSchema = new Schema({
   name: {
     type: String,
-    require: true
+    require: true   // 設定為必填欄位
+  },
+  isDone: {
+    type: Boolean,
+    default: false  // 預設完成狀態為 false
   }
 })
 
