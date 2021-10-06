@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 const Todo = require('./models/todo') // 載入 Todo model
 const app = express()
 const db = mongoose.connection
@@ -20,6 +21,7 @@ app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 app.listen(3000, () => {
   console.log('App is running on http://localhost:3000')
@@ -66,7 +68,7 @@ app.get('/todos/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body   // 拿出 body 內定義好的 name、isDone 給 name、isDone
   // 等同這個寫法
@@ -92,7 +94,7 @@ app.post('/todos/:id/edit', (req, res) => {
 
 // **************** 刪除 todo 資料 **************** //
 
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id                     // id = 查詢出使用者想刪除的 todo 的 id
   return Todo.findById(id)                     //資料庫查詢成功後，把資料放進 todo
     .then(todo => todo.remove())               //用 todo.remove() 刪除這筆資料
