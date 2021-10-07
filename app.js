@@ -7,7 +7,8 @@ require('./config/mongoose')
 
 const routes = require('./routes')    // 引用路由器，預設會自動去找指定目錄下的 index 檔案
 const app = express()
-
+const PORT = process.env.PORT || 3000
+// Heroku 環境則使用 process.env.PORT || 本地環境，使用 3000 
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -17,5 +18,5 @@ app.use(methodOverride('_method'))
 app.use(routes)
 
 app.listen(3000, () => {
-  console.log('App is running on http://localhost:3000')
+  console.log(`App is running on http://localhost:${PORT}`)
 })
